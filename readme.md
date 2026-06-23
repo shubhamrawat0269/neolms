@@ -6,7 +6,7 @@ Goal: Set up the project structure, database models, authentication system, and 
 1.1 Project Setup
 Backend:
 
-Initialize package.json. Install dependencies: express, mongoose, dotenv, cors, helmet, morgan.
+Initialize package.json. Install dependencies: express, mongoose, dotenv, cors, helmet.
 
 Create an ES module structure ("type": "module" in package.json).
 

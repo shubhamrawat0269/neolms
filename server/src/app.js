@@ -1,5 +1,4 @@
 import cors from "cors";
-import morgan from "morgan";
 import helmet from "helmet";
 import express from "express";
 import cookieParser from "cookie-parser";
@@ -29,13 +28,6 @@ app.use(
     allowedHeaders: ["Content-Type", "Authorization"],
   }),
 );
-
-// Logging middleware
-if (process.env.NODE_ENV === "development") {
-  app.use(morgan("dev"));
-} else {
-  app.use(morgan("combined"));
-}
 
 // Body parsing middleware
 app.use(express.json({ limit: "10mb" }));
