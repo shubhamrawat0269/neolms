@@ -125,6 +125,17 @@ export const logout = asyncHandler(async (req, res) => {
     .json(new ApiResponse(HTTP_STATUS.OK, null, "Logged out successfully"));
 });
 
+// @desc    Get Current User
+// @route   GET /api/auth/me
+// @access  Private
+export const getCurrentUser = asyncHandler(async (req, res) => {
+  res
+    .status(HTTP_STATUS.OK)
+    .json(
+      new ApiResponse(HTTP_STATUS.OK, req.user, "User fetched successfully"),
+    );
+});
+
 // @desc    Refresh Token
 // @route   POST /api/auth/refresh-token
 // @access  Private
