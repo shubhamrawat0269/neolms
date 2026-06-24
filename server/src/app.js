@@ -8,9 +8,6 @@ import authRoutes from "./routes/auth.routes.js";
 import courseRoutes from "./routes/course.routes.js";
 import adminRoutes from "./routes/admin.routes.js";
 
-// Import middleware
-import errorHandler from "./middleware/error.middleware.js";
-
 // Import utilities
 import ApiError from "./utils/apiError.js";
 import { HTTP_STATUS } from "./config/constants.js";
@@ -39,15 +36,5 @@ app.use(cookieParser());
 app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/courses", courseRoutes);
-
-// 404 handler
-app.use((req, res, next) => {
-  next(
-    new ApiError(HTTP_STATUS.NOT_FOUND, `Route ${req.originalUrl} not found`),
-  );
-});
-
-// Global error handler
-app.use(errorHandler);
 
 export default app;
