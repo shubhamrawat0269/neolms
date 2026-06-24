@@ -36,6 +36,7 @@ app.use(cookieParser());
 
 // API Routes
 app.use("/api/auth", authRoutes);
+app.use('/api/admin', adminRoutes);
 app.use("/api/courses", courseRoutes);
 
 // 404 handler
