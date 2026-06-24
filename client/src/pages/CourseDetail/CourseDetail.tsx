@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/redux/store";
+import { useSelector } from "react-redux";
+import { RootState, useAppDispatch } from "@/redux/store";
 import { fetchCourseById, clearCurrentCourse } from "@/redux/slice/courseSlice";
 import { Section, Lesson } from "@/types";
 import {
@@ -15,7 +15,7 @@ import {
 
 const CourseDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { currentCourse, isLoading, error } = useSelector(
     (state: RootState) => state.courses,
@@ -27,7 +27,6 @@ const CourseDetail: React.FC = () => {
   const [expandedSections, setExpandedSections] = useState<Set<string>>(
     new Set(),
   );
-  const [activeLesson, setActiveLesson] = useState<string | null>(null);
 
   useEffect(() => {
     if (id) {
@@ -255,11 +254,7 @@ const CourseDetail: React.FC = () => {
                         {section.lessons.map((lesson: Lesson) => (
                           <div
                             key={lesson._id}
-                            className={`flex items-center justify-between p-3 rounded ${
-                              activeLesson === lesson._id
-                                ? "bg-blue-50 border border-blue-200"
-                                : "hover:bg-gray-50"
-                            }`}
+                            className="flex items-center justify-between p-3 rounded hover:bg-gray-50"
                           >
                             <div className="flex items-center space-x-3">
                               {lesson.isPreview || isAuthenticated ? (

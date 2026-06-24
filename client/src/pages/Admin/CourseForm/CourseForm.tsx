@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/redux/store";
+import { useSelector } from "react-redux";
+import { RootState, useAppDispatch } from "@/redux/store";
 import {
   createCourse,
   updateCourse,
@@ -24,7 +24,7 @@ interface CourseFormData {
 const CourseForm: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const { currentCourse, isLoading } = useSelector(
     (state: RootState) => state.courses,
   );

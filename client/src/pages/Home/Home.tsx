@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { AppDispatch, RootState } from "@/redux/store";
+import { RootState, useAppDispatch } from "@/redux/store";
 import {
   fetchFeaturedCourses,
   fetchCategories,
@@ -10,7 +10,7 @@ import CourseCard from "@/components/CourseCard/CourseCard";
 import { FaSearch, FaArrowRight } from "react-icons/fa";
 
 const Home: React.FC = () => {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const { featuredCourses, categories, isLoading } = useSelector(
     (state: RootState) => state.courses,
   );

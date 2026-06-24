@@ -1,13 +1,13 @@
 // frontend/src/pages/Admin/CourseList/CourseList.tsx
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { AppDispatch, RootState } from "@/redux/store";
+import { RootState, useAppDispatch } from "@/redux/store";
 import { fetchCourses, deleteCourse } from "@/redux/slice/courseSlice";
 import { FaEdit, FaTrash, FaEye, FaPlus } from "react-icons/fa";
 
 const CourseList: React.FC = () => {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const { courses, isLoading, pagination } = useSelector(
     (state: RootState) => state.courses,
   );
