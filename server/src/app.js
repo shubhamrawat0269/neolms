@@ -6,6 +6,7 @@ import cookieParser from "cookie-parser";
 // Import routes
 import authRoutes from "./routes/auth.routes.js";
 import courseRoutes from "./routes/course.routes.js";
+import adminRoutes from "./routes/admin.routes.js";
 
 // Import middleware
 import errorHandler from "./middleware/error.middleware.js";
@@ -36,7 +37,7 @@ app.use(cookieParser());
 
 // API Routes
 app.use("/api/auth", authRoutes);
-app.use('/api/admin', adminRoutes);
+app.use("/api/admin", adminRoutes);
 app.use("/api/courses", courseRoutes);
 
 // 404 handler
