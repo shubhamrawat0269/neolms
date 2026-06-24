@@ -94,11 +94,12 @@ export const validate = (req, res, next) => {
       message: error.msg,
     }));
 
-    throw new ApiError(
+    const error = new ApiError(
       HTTP_STATUS.BAD_REQUEST,
       "Validation failed",
       errorMessages,
     );
+    return next(error);
   }
 
   next();
