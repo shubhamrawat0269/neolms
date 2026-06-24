@@ -1,91 +1,73 @@
-import axios, { AxiosError } from "axios";
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import type {
-  AuthState,
-  SignupCredentials,
-  LoginCredentials,
-  SignupResponse,
-  LoginResponse,
-} from "../../types";
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import axios from "axios";
+import { User, AuthState } from "@/types";
 
-// API instance
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
 const api = axios.create({
   baseURL: API_URL,
   withCredentials: true,
+  headers: {
+    "Content-Type": "application/json",
+  },
 });
 
-// Async thunks
-export const signup = createAsyncThunk<
-  SignupResponse,
-  SignupCredentials,
-  {
-    rejectValue: unknown;
-  }
->("auth/signup", async (userData, { rejectWithValue }) => {
-  try {
-    const response = await api.post<{ data: SignupResponse }>(
-      "/auth/signup",
-      userData,
-    );
-    return response.data.data;
-  } catch (error) {
-    const axiosError = error as AxiosError;
-    return rejectWithValue(axiosError.response?.data);
-  }
-});
+// Async Thunks
+export const signup = createAsyncThunk(
+  "auth/signup",
+  async (
+    userData: { name: string; email: string; password: string; role?: string },
+    { rejectWithValue },
+  ) => {
+    try {
+      const response = await api.post("/auth/signup", userData);
+      return response.data.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.message || "Signup failed");
+    }
+  },
+);
 
-export const login = createAsyncThunk<
-  LoginResponse,
-  LoginCredentials,
-  {
-    rejectValue: unknown;
-  }
->("auth/login", async (credentials, { rejectWithValue }) => {
-  try {
-    const response = await api.post<{ data: LoginResponse }>(
-      "/auth/login",
-      credentials,
-    );
-    return response.data.data;
-  } catch (error) {
-    const axiosError = error as AxiosError;
-    return rejectWithValue(axiosError.response?.data);
-  }
-});
+export const login = createAsyncThunk(
+  "auth/login",
+  async (
+    credentials: { email: string; password: string },
+    { rejectWithValue },
+  ) => {
+    try {
+      const response = await api.post("/auth/login", credentials);
+      return response.data.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.message || "Login failed");
+    }
+  },
+);
 
-export const logout = createAsyncThunk<
-  null,
-  void,
-  {
-    rejectValue: unknown;
-  }
->("auth/logout", async (_, { rejectWithValue }) => {
-  try {
-    await api.post("/auth/logout");
-    return null;
-  } catch (error) {
-    const axiosError = error as AxiosError;
-    return rejectWithValue(axiosError.response?.data);
-  }
-});
+export const logout = createAsyncThunk(
+  "auth/logout",
+  async (_, { rejectWithValue }) => {
+    try {
+      await api.post("/auth/logout");
+      return null;
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.message || "Logout failed");
+    }
+  },
+);
 
-export const getCurrentUser = createAsyncThunk<
-  SignupResponse,
-  void,
-  {
-    rejectValue: unknown;
-  }
->("auth/getCurrentUser", async (_, { rejectWithValue }) => {
-  try {
-    const response = await api.get<{ data: SignupResponse }>("/auth/me");
-    return response.data.data;
-  } catch (error) {
-    const axiosError = error as AxiosError;
-    return rejectWithValue(axiosError.response?.data);
-  }
-});
+export const getCurrentUser = createAsyncThunk(
+  "auth/getCurrentUser",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await api.get("/auth/me");
+      return response.data.data;
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to get user",
+      );
+    }
+  },
+);
 
 const initialState: AuthState = {
   user: null,
@@ -100,6 +82,14 @@ const authSlice = createSlice({
   reducers: {
     clearError: (state) => {
       state.error = null;
+    },
+    setUser: (state, action: PayloadAction<User>) => {
+      state.user = action.payload;
+      state.isAuthenticated = true;
+    },
+    clearUser: (state) => {
+      state.user = null;
+      state.isAuthenticated = false;
     },
   },
   extraReducers: (builder) => {
@@ -116,7 +106,7 @@ const authSlice = createSlice({
       })
       .addCase(signup.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.payload;
+        state.error = action.payload as string;
       })
       // Login
       .addCase(login.pending, (state) => {
@@ -130,7 +120,7 @@ const authSlice = createSlice({
       })
       .addCase(login.rejected, (state, action) => {
         state.isLoading = false;
-        state.error = action.payload;
+        state.error = action.payload as string;
       })
       // Logout
       .addCase(logout.fulfilled, (state) => {
@@ -156,5 +146,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { clearError } = authSlice.actions;
+export const { clearError, setUser, clearUser } = authSlice.actions;
 export default authSlice.reducer;

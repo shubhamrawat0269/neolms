@@ -5,8 +5,10 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import { Provider, useSelector } from "react-redux";
-import { RootState, store } from "./redux/store";
+import { Provider } from "react-redux";
+import { store } from "./redux/store";
+import { useSelector } from "react-redux";
+import { RootState } from "./redux/store";
 
 // Layout
 import Layout from "./components/Layout/Layout";
@@ -39,11 +41,11 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   );
 
   if (!isAuthenticated) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/login" replace />;
   }
 
   if (requiredRole && user?.role !== requiredRole) {
-    return <Navigate to="/" />;
+    return <Navigate to="/" replace />;
   }
 
   return <>{children}</>;
