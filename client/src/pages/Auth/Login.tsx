@@ -88,21 +88,6 @@ const Login: React.FC = () => {
     }
   };
 
-  const handleDemoLogin = async (role: "student" | "admin") => {
-    const credentials =
-      role === "admin"
-        ? { email: "admin@veolms.com", password: "Admin123!" }
-        : { email: "student@veolms.com", password: "Student123!" };
-
-    setFormData(credentials);
-
-    try {
-      await dispatch(login(credentials)).unwrap();
-    } catch (err) {
-      console.error("Demo login failed:", err);
-    }
-  };
-
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
@@ -123,7 +108,7 @@ const Login: React.FC = () => {
         </div>
 
         {/* Demo Login Buttons */}
-        <div className="flex gap-2">
+        {/* <div className="flex gap-2">
           <button
             onClick={() => handleDemoLogin("student")}
             className="flex-1 bg-green-50 text-green-700 border border-green-300 rounded-lg px-4 py-2 text-sm font-medium hover:bg-green-100 transition-colors"
@@ -136,7 +121,7 @@ const Login: React.FC = () => {
           >
             Demo Admin
           </button>
-        </div>
+        </div> */}
 
         {/* Error Message */}
         {error && (
@@ -288,13 +273,6 @@ const Login: React.FC = () => {
                 "Sign in"
               )}
             </button>
-          </div>
-
-          {/* Additional Info */}
-          <div className="text-center text-sm text-gray-500">
-            <p>Demo credentials:</p>
-            <p className="text-xs">Student: student@veolms.com / Student123!</p>
-            <p className="text-xs">Admin: admin@veolms.com / Admin123!</p>
           </div>
         </form>
       </div>
